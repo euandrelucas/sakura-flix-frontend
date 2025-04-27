@@ -28,13 +28,11 @@ export default function HomePage() {
   return (
     <div className="flex flex-col gap-8 pb-8">
       {/* Hero Section with Featured Carousel */}
-      <section className="pt-16">
         <Suspense
           fallback={<Skeleton className="h-[70vh] min-h-[500px] w-full" />}
         >
           <FeaturedCarousel />
         </Suspense>
-      </section>
 
       {/* Genre Selector */}
       {/* <section className="container px-4">
