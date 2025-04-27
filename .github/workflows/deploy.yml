@@ -1,0 +1,33 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  deploy:
+    name: "Deploy to production"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - name: Setup ssh
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+          cat >>~/.ssh/config << END
+          Host prod
+            HostName $SSH_HOST
+            User $SSH_USER
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+      - name: Cloning repository
+        run: ssh prod 'cd sakura-flix-frontend && git pull https://${{ secrets.GH_AUTH }}:x-oauth-basic@github.com/euandrelucas/sakura-flix-frontend.git master --force'
+      - name: Building container
+        run: ssh prod 'bash -i -c "cd sakura-flix-frontend && docker compose up -d --build --force-recreate --remove-orphans"'

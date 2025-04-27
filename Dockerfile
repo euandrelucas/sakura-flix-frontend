@@ -18,7 +18,7 @@ RUN npm install
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/tsconfig.json ./
 COPY --from=builder /app/package-lock.json ./
 COPY --from=builder /app/package.json ./
