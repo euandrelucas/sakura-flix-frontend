@@ -1,0 +1,11 @@
+services:
+  sakuraflix-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sakuraflix-site
+    ports:
+      - "45679:3000" # Porta externa 45679 → interna 3000
+    restart: always
+    environment:
+      - NODE_ENV=production
