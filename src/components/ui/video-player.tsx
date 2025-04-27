@@ -84,7 +84,9 @@ class M3U8FixLoader extends Hls.DefaultConfig.loader {
             decodeURIComponent(context.url.replace(proxyBase, ""))
           );
 
-          const fixedText = (typeof originalText === "string" ? originalText : "")
+          const fixedText = (
+            typeof originalText === "string" ? originalText : ""
+          )
             .split("\n")
             .map((line) => {
               line = line.trim();
@@ -306,6 +308,28 @@ export function VideoPlayer({
 
     video.volume = isMuted ? 0 : volume;
   }, [volume, isMuted]);
+
+  // Handle subtitle change
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    for (let i = 0; i < video.textTracks.length; i++) {
+      const track = video.textTracks[i];
+      if (!selectedSubtitle) {
+        track.mode = "disabled"; // Desativa todas se estiver sem legenda
+      } else {
+        const trackSrc = (
+          video.children[i + sources.length] as HTMLTrackElement
+        )?.src;
+        if (trackSrc === selectedSubtitle) {
+          track.mode = "showing"; // Ativa a legenda selecionada
+        } else {
+          track.mode = "disabled"; // Desativa as outras
+        }
+      }
+    }
+  }, [selectedSubtitle, sources.length]);
 
   // Handle controls visibility
   useEffect(() => {
