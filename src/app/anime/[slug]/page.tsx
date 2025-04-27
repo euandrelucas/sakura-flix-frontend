@@ -19,7 +19,7 @@ import { notFound } from "next/navigation";
 async function getAnimeDetails(slug: string) {
   try {
     const response = await fetch(
-      `http://154.53.33.246:45678/anime/info?id=${slug}`,
+      `https://sakura-api.andrepaiva.dev/anime/info?id=${slug}`,
       { cache: "no-store" }
     );
 
