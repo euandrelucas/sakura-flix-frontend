@@ -446,7 +446,6 @@ export default function WatchPage({
         <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
           <div>
             <h1 className="text-2xl font-bold">
-              Episode {currentEpisode?.number}:{" "}
               {currentEpisode?.title || `Episode ${currentEpisode?.number}`}
             </h1>
             <p className="mt-2 text-muted-foreground">
