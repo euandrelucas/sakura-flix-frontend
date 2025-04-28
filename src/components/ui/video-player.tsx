@@ -62,7 +62,7 @@ class M3U8FixLoader extends Hls.DefaultConfig.loader {
     const originalLoad = this.load.bind(this);
 
     this.load = (context, config, callbacks) => {
-      const proxyBase = "https://sakura-api.andrepaiva.dev/proxy?url=";
+      const proxyBase = `${process.env.NEXT_PUBLIC_API_URL}/proxy?url=`;
 
       // Se a URL for relativa, resolve ela
       if (!context.url.startsWith("http")) {

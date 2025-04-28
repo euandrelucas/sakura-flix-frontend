@@ -32,7 +32,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 async function searchAnime(query: string) {
   try {
     const response = await fetch(
-      `https://sakura-api.andrepaiva.dev/anime/search?q=${encodeURIComponent(
+      `${process.env.NEXT_PUBLIC_API_URL}/anime/search?q=${encodeURIComponent(
         query
       )}`
     );

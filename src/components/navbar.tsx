@@ -76,7 +76,7 @@ export default function Navbar() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://sakura-api.andrepaiva.dev/anime/search?q=${encodeURIComponent(
+          `${process.env.NEXT_PUBLIC_API_URL}/anime/search?q=${encodeURIComponent(
             searchQuery
           )}`
         );

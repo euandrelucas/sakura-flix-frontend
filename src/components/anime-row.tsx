@@ -16,7 +16,7 @@ interface AnimeRowProps {
 // Replace the entire getAnimeByCategory function with this real API implementation
 const getAnimeByCategory = async (category: string, count = 10) => {
   try {
-    const response = await fetch("https://sakura-api.andrepaiva.dev/anime/recent");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/anime/recent`);
     if (!response.ok) {
       throw new Error("Failed to fetch anime data");
     }

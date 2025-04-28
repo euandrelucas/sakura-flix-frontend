@@ -16,7 +16,7 @@ import { VideoPlayer } from "@/components/ui/video-player";
 async function getEpisodeDetails(episodeId: string) {
   try {
     const response = await fetch(
-      `https://sakura-api.andrepaiva.dev/anime/watch?episodeId=${episodeId}&server=vidcloud`
+      `${process.env.NEXT_PUBLIC_API_URL}/anime/watch?episodeId=${episodeId}&server=vidcloud`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch episode details");
@@ -32,7 +32,7 @@ async function getEpisodeDetails(episodeId: string) {
 async function getAnimeInfo(animeId: string) {
   try {
     const response = await fetch(
-      `https://sakura-api.andrepaiva.dev/anime/info?id=${animeId}`
+      `${process.env.NEXT_PUBLIC_API_URL}/anime/info?id=${animeId}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch anime info");

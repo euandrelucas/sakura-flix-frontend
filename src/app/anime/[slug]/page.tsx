@@ -19,7 +19,7 @@ import { notFound } from "next/navigation";
 async function getAnimeDetails(slug: string) {
   try {
     const response = await fetch(
-      `https://sakura-api.andrepaiva.dev/anime/info?id=${slug}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/anime/info?id=${slug}`,
       { cache: "no-store" }
     );
 
