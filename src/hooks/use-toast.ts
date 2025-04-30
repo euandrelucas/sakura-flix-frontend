@@ -1,40 +1,97 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-// This is a simplified version of the toast hook
-// In a real implementation, you would use a proper toast library like react-hot-toast or sonner
+import { useState, useEffect, useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-import { useState } from "react";
+export type ToastVariant =
+  | "default"
+  | "success"
+  | "destructive"
+  | "warning"
+  | "info";
 
-type ToastVariant = "default" | "success" | "destructive" | "warning";
-
-interface ToastProps {
+export interface Toast {
+  id: string;
   title: string;
   description?: string;
   variant?: ToastVariant;
   duration?: number;
-  id?: string;
+  onClose?: () => void;
 }
 
-export function useToast() {
-  const [toasts, setToasts] = useState<ToastProps[]>([]);
+interface ToastOptions {
+  title: string;
+  description?: string;
+  variant?: ToastVariant;
+  duration?: number;
+  onClose?: () => void;
+}
 
-  const toast = (props: ToastProps) => {
-    const id = Math.random().toString(36).substring(2, 9);
-    const newToast = { ...props, id };
+// Create a singleton pattern for toast state to share across hooks
+let toasts: Toast[] = [];
+let listeners: ((toasts: Toast[]) => void)[] = [];
 
-    setToasts((prevToasts) => [...prevToasts, newToast]);
+const DEFAULT_TOAST_DURATION = 5000; // 5 seconds
 
-    // Auto-dismiss toast after duration
-    setTimeout(() => {
-      setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-    }, props.duration || 5000);
+function emitChange() {
+  listeners.forEach((listener) => {
+    listener(toasts);
+  });
+}
+
+export function useToast(): {
+  toast: (options: ToastOptions) => string;
+  dismiss: (id: string) => void;
+  toasts: Toast[];
+} {
+  const [currentToasts, setCurrentToasts] = useState<Toast[]>(toasts);
+
+  useEffect(() => {
+    listeners.push(setCurrentToasts);
+    return () => {
+      listeners = listeners.filter((listener) => listener !== setCurrentToasts);
+    };
+  }, []);
+
+  const addToast = useCallback((options: ToastOptions) => {
+    const id = uuidv4();
+    const toast: Toast = {
+      id,
+      title: options.title,
+      description: options.description,
+      variant: options.variant || "default",
+      duration: options.duration || DEFAULT_TOAST_DURATION,
+      onClose: options.onClose,
+    };
+
+    toasts = [...toasts, toast];
+    emitChange();
+
+    // Auto dismiss
+    if (toast.duration !== Number.POSITIVE_INFINITY) {
+      setTimeout(() => {
+        removeToast(id);
+      }, toast.duration);
+    }
 
     return id;
-  };
+  }, []);
 
-  const dismiss = (id: string) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-  };
+  const removeToast = useCallback((id: string) => {
+    const toast = toasts.find((t) => t.id === id);
+    toasts = toasts.filter((t) => t.id !== id);
+    emitChange();
 
-  return { toast, dismiss, toasts };
+    // Call onClose callback if provided
+    if (toast?.onClose) {
+      toast.onClose();
+    }
+  }, []);
+
+  return {
+    toast: addToast,
+    dismiss: removeToast,
+    toasts: currentToasts,
+  };
 }

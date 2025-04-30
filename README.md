@@ -99,5 +99,5 @@ Distribuído sob a licença MIT. Veja o arquivo [`LICENSE`](./LICENSE) para mais
 
 Feito com 💖 por [André Paiva](https://andrepaiva.dev)
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-André%20Paiva-blue?style=flat-square&logo=linkedin)](https://linkedin.com/in/andrepaivadev)
-[![GitHub](https://img.shields.io/badge/GitHub-@andrepaiva.dev-000?style=flat-square&logo=github)](https://github.com/andrepaiva-dev)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-André%20Paiva-blue?style=flat-square&logo=linkedin)](https://linkedin.com/in/andretpaiva)
+[![GitHub](https://img.shields.io/badge/GitHub-@euandrelucas-000?style=flat-square&logo=github)](https://github.com/euandrelucas)

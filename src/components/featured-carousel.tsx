@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Play, Info, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { Play, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import Link from "next/link";
 
 // Mock featured anime data
 const featuredAnime = [
@@ -135,15 +136,17 @@ export default function FeaturedCarousel() {
                   {anime.description}
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Button
-                    size="lg"
-                    className="gap-2 bg-primary hover:bg-primary/90"
-                  >
-                    <Play className="h-5 w-5" /> Watch Now
-                  </Button>
-                  <Button size="lg" variant="outline" className="gap-2">
+                  <Link href={`/anime/${anime.id}`} passHref>
+                    <Button
+                      size="lg"
+                      className="gap-2 bg-primary hover:bg-primary/90"
+                    >
+                      <Play className="h-5 w-5" /> Watch Now
+                    </Button>
+                  </Link>
+                  {/* <Button size="lg" variant="outline" className="gap-2">
                     <Info className="h-5 w-5" /> More Info
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </div>

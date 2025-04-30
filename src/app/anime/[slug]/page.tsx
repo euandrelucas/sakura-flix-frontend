@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import EpisodeList from "@/components/episode-list";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 // Function to fetch anime details from the API
 async function getAnimeDetails(slug: string) {
@@ -33,6 +34,44 @@ async function getAnimeDetails(slug: string) {
     console.error("Error fetching anime details:", error);
     return null;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const anime = await getAnimeDetails(params.slug);
+
+  if (!anime) {
+    return {
+      title: "Anime não encontrado",
+      description: "Este anime não foi encontrado ou não está disponível.",
+    };
+  }
+
+  return {
+    title: `${anime.title} - Assista agora | SakuraFlix`,
+    description: anime.description?.slice(0, 160) || "Assista agora em HD.",
+    openGraph: {
+      title: `${anime.title} - SakuraFlix`,
+      description: anime.description?.slice(0, 160),
+      images: [
+        {
+          url: anime.image || "/placeholder.svg",
+          width: 800,
+          height: 1200,
+          alt: anime.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${anime.title} - SakuraFlix`,
+      description: anime.description?.slice(0, 160),
+      images: [anime.image || "/placeholder.svg"],
+    },
+  };
 }
 
 export default async function AnimePage({

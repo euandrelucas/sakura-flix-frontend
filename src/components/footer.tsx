@@ -1,7 +1,35 @@
+"use client";
+
+import { useEffect } from "react";
+import Script from "next/script";
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
+  useEffect(() => {
+    // Proteção contra remoção da badge DMCA
+    const checkDMCABadge = () => {
+      const badge = document.querySelector(".dmca-badge");
+      if (!badge) {
+        document.body.innerHTML = `
+          <div style="text-align: center; margin-top: 30vh; font-size: 1.5rem; color: red;">
+            ⚠️ Este site removeu a proteção DMCA e foi desativado.
+          </div>
+        `;
+      }
+    };
+
+    // Verifica a badge por até 10 segundos
+    const interval = setInterval(checkDMCABadge, 1000);
+    const timeout = setTimeout(() => clearInterval(interval), 10000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <footer className="border-t bg-background/50 backdrop-blur-sm">
       <div className="container px-4 py-8 md:py-12">
@@ -47,6 +75,7 @@ export default function Footer() {
               </Link>
             </div>
           </div>
+
           <div>
             <h3 className="text-sm font-medium">Browse</h3>
             <ul className="mt-4 space-y-2 text-sm">
@@ -92,6 +121,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
           <div>
             <h3 className="text-sm font-medium">Help</h3>
             <ul className="mt-4 space-y-2 text-sm">
@@ -129,6 +159,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
           <div>
             <h3 className="text-sm font-medium">Legal</h3>
             <ul className="mt-4 space-y-2 text-sm">
@@ -159,12 +190,38 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
           <p>
-            &copy; {new Date().getFullYear()} SakuraFlix. All rights reserved.
+            &copy; {new Date().getFullYear()} SakuraFlix. Todos os direitos
+            reservados.
           </p>
+
+          {/* DMCA Badge */}
+          <div className="mt-2 flex justify-center">
+            <a
+              href="https://www.dmca.com/Protection/Status.aspx?ID=68067313-559f-4140-b0d8-f28805f2b1da"
+              title="DMCA.com Protection Status"
+              className="dmca-badge"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-06.png?ID=68067313-559f-4140-b0d8-f28805f2b1da"
+                alt="DMCA.com Protection Status"
+                width={150}
+                height={30}
+              />
+            </a>
+          </div>
         </div>
       </div>
+
+      {/* DMCA Script */}
+      <Script
+        src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"
+        strategy="afterInteractive"
+      />
     </footer>
   );
 }

@@ -5,6 +5,7 @@ import "./globals.css";
 // import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { ToastProvider } from "@/components/toast-provider";
 
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -23,18 +24,19 @@ export default function RootLayout({
       <body
         className={`${nunito.className} bg-background text-foreground antialiased`}
       >
-
-          <div className="flex min-h-screen flex-col">
-            <Navbar />
-            {/* Dê um padding da navbar para o contedo */}
-            <div className="h-16" />
-            {/* Aqui fica o conteúdo da página */}
-            <main className="flex-1">{children}</main>
-            {/* Aqui fica o footer */}
-            <div className="h-16" />
-            {/* Footer */}
-            <Footer />
-          </div>
+        <div className="flex min-h-screen flex-col">
+          <Navbar />
+          {/* Dê um padding da navbar para o contedo */}
+          <div className="h-16" />
+          {/* Aqui fica o conteúdo da página */}
+          <main className="flex-1">{children}</main>
+          {/* Aqui fica o footer */}
+          <div className="h-16" />
+          {/* Footer */}
+          <Footer />
+          {/* Toast Provider */}
+          <ToastProvider />
+        </div>
       </body>
     </html>
   );

@@ -1,20 +1,24 @@
 "use client";
 
 import * as React from "react";
-import { CheckCircle2, AlertCircle, XCircle, Info } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const toastVariants = cva(
-  "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-4 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full",
+  "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full",
   {
     variants: {
       variant: {
-        default: "border bg-background",
-        success: "border-green-500/50 bg-green-500/10 text-green-600",
-        destructive: "border-red-500/50 bg-red-500/10 text-red-600",
-        warning: "border-yellow-500/50 bg-yellow-500/10 text-yellow-600",
+        default: "border bg-background text-foreground",
+        success:
+          "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400",
+        destructive:
+          "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400",
+        warning:
+          "border-yellow-500/30 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+        info: "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400",
       },
     },
     defaultVariants: {
@@ -37,22 +41,23 @@ const Toast = React.forwardRef<
 });
 Toast.displayName = "Toast";
 
-const ToastIcon = ({
-  variant,
-}: {
-  variant?: "default" | "success" | "destructive" | "warning";
-}) => {
-  switch (variant) {
-    case "success":
-      return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-    case "destructive":
-      return <XCircle className="h-5 w-5 text-red-600" />;
-    case "warning":
-      return <AlertCircle className="h-5 w-5 text-yellow-600" />;
-    default:
-      return <Info className="h-5 w-5 text-muted-foreground" />;
-  }
-};
+const ToastClose = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => (
+  <button
+    ref={ref}
+    className={cn(
+      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100",
+      className
+    )}
+    toast-close=""
+    {...props}
+  >
+    <X className="h-4 w-4" />
+  </button>
+));
+ToastClose.displayName = "ToastClose";
 
 const ToastTitle = React.forwardRef<
   HTMLDivElement,
@@ -74,36 +79,4 @@ const ToastDescription = React.forwardRef<
 ));
 ToastDescription.displayName = "ToastDescription";
 
-const ToastClose = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => (
-  <button
-    ref={ref}
-    className={cn(
-      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100",
-      className
-    )}
-    {...props}
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-4 w-4"
-    >
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-    <span className="sr-only">Close</span>
-  </button>
-));
-ToastClose.displayName = "ToastClose";
-
-export { Toast, ToastIcon, ToastTitle, ToastDescription, ToastClose };
+export { Toast, ToastClose, ToastTitle, ToastDescription };

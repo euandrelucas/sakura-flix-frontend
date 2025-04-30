@@ -141,20 +141,23 @@ export default function RegisterPage() {
         title: "Account created successfully!",
         description: "You can now log in with your credentials.",
         variant: "success",
+        duration: 5000,
+        onClose: () => {
+          // Redirect to login page after toast is dismissed
+          router.push("/auth/login");
+        },
       });
-
-      // Redirect to login page after a short delay
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 5000);
     } catch (error: unknown) {
       console.error(error);
 
-      // Show error toast
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+
       toast({
         title: "Registration failed",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
+        description: errorMessage,
         variant: "destructive",
+        duration: 7000,
       });
     }
   }
