@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌸 SakuraFlix Frontend
 
-## Getting Started
+[![Deploy](https://img.shields.io/github/actions/workflow/status/euandrelucas/sakura-flix-frontend/deploy.yml?label=build&style=flat-square)](https://github.com/euandrelucas/sakura-flix-frontend/actions)
+<!-- [![Deploy](https://img.shields.io/badge/deploy-vercel-000?logo=vercel&style=flat-square)](https://vercel.com/dashboard) -->
+[![License](https://img.shields.io/github/license/euandrelucas/sakura-flix-frontend?style=flat-square)](./LICENSE)
+[![Author](https://img.shields.io/badge/autor-andrepaiva.dev-blueviolet?style=flat-square)](https://andrepaiva.dev)
 
-First, run the development server:
+> Frontend do SakuraFlix — um serviço de streaming de animes com player avançado, legendas dinâmicas e visual moderno, feito com Next.js e Tailwind.
+
+---
+
+## ✨ Tecnologias Utilizadas
+
+- ⚡ **Next.js 14** – App Router com `src/app/`
+- 🎨 **Tailwind CSS** – Estilização rápida e responsiva
+- 💻 **TypeScript** – Tipagem estática moderna
+- 🎥 **HLS.js** – Suporte a `.m3u8` com legendas
+- 📦 **ShadCN UI** – Componentes de UI acessíveis
+- 🧩 **Lucide Icons** – Ícones interativos SVG
+
+---
+
+## 🚀 Como rodar localmente
 
 ```bash
+git clone https://github.com/euandrelucas/sakura-flix-frontend.git
+cd sakura-flix-frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000) no navegador para usar o app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Estrutura do Projeto
 
-## Learn More
+```
+📦 sakura-flix-frontend
+├── src/app/               # Rotas e páginas
+├── src/components/        # Componentes reutilizáveis
+├── src/lib/               # Helpers e funções utilitárias
+├── public/            # Arquivos estáticos
+└── ...
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔐 Variáveis de Ambiente
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Crie um arquivo `.env` com as seguintes variáveis:
 
-## Deploy on Vercel
+```env
+NEXT_PUBLIC_API_URL=https://sua-api-privada.com
+NEXT_PUBLIC_API_KEY=sua_api_key_privada
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💡 Funcionalidades
+
+- ✅ Player com suporte a streaming HLS
+- ✅ Múltiplas faixas de legendas por episódio
+- ✅ Design totalmente responsivo
+- 🚧 Favoritos e Histórico (em desenvolvimento)
+- 🚧 Login com backend e contas de usuário
+
+---
+
+## ☁️ Deploy
+
+Você pode fazer o deploy automaticamente via [Vercel](https://vercel.com/). Você pode fazer fork do projeto e implantar com um clique:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/import?s=https://github.com/euandrelucas/sakura-flix-frontend)
+
+---
+
+## 🤝 Contribuições
+
+Sinta-se à vontade para abrir uma issue ou enviar um pull request com melhorias!
+
+```bash
+# Fork este repositório
+# Crie uma branch com sua feature: git checkout -b minha-feature
+# Commit suas mudanças: git commit -m 'feat: nova funcionalidade'
+# Push para a branch: git push origin minha-feature
+# Abra um Pull Request 🚀
+```
+
+---
+
+## 📜 Licença
+
+Distribuído sob a licença MIT. Veja o arquivo [`LICENSE`](./LICENSE) para mais detalhes.
+
+---
+
+## 🙋‍♂️ Autor
+
+Feito com 💖 por [André Paiva](https://andrepaiva.dev)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-André%20Paiva-blue?style=flat-square&logo=linkedin)](https://linkedin.com/in/andrepaivadev)
+[![GitHub](https://img.shields.io/badge/GitHub-@andrepaiva.dev-000?style=flat-square&logo=github)](https://github.com/andrepaiva-dev)
