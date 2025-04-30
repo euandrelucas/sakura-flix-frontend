@@ -146,7 +146,7 @@ export default function RegisterPage() {
       // Redirect to login page after a short delay
       setTimeout(() => {
         router.push("/auth/login");
-      }, 1500);
+      }, 5000);
     } catch (error: unknown) {
       console.error(error);
 
