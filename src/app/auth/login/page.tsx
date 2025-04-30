@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,7 +20,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
 
 // Schema validation with zod
 const loginSchema = z.object({
@@ -33,7 +33,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -49,36 +51,10 @@ export default function LoginPage() {
   const isSubmitting = formState.isSubmitting;
 
   async function onSubmit(data: LoginFormValues) {
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+    const success = await login(data);
 
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.message || "Error logging in");
-      }
-
-      toast({
-        title: "Login successful!",
-        description: "Redirecting to your dashboard...",
-        variant: "success",
-        duration: 3000,
-        onClose: () => {
-          router.push("/"); // or dashboard, etc.
-        },
-      });
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description:
-          error instanceof Error ? error.message : "Unknown error occurred",
-        variant: "destructive",
-        duration: 5000,
-      });
+    if (success) {
+      router.push(callbackUrl);
     }
   }
 

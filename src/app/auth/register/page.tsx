@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import type React from "react";
@@ -147,15 +148,13 @@ export default function RegisterPage() {
           router.push("/auth/login");
         },
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error(error);
 
-      const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
-
+      // Show error toast
       toast({
         title: "Registration failed",
-        description: errorMessage,
+        description: error.message || "An unknown error occurred",
         variant: "destructive",
         duration: 7000,
       });

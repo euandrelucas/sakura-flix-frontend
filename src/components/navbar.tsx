@@ -6,7 +6,18 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Search, Bell, User, Menu, X, Loader2 } from "lucide-react";
+import {
+  Search,
+  Bell,
+  User,
+  Menu,
+  X,
+  Loader2,
+  LogOut,
+  Settings,
+  Heart,
+  Library,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
+import { useAuth } from "@/hooks/use-auth";
 
 interface AnimeSearchResult {
   id: string;
@@ -44,6 +56,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const isMobile = useIsMobile();
+  const { user, isAuthenticated, logout } = useAuth();
 
   // Close suggestions when clicking outside
   useOnClickOutside(searchContainerRef, () => {
@@ -76,7 +89,7 @@ export default function Navbar() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/anime/search?q=${encodeURIComponent(
+          `http://154.53.33.246:45678/anime/search?q=${encodeURIComponent(
             searchQuery
           )}`
         );
@@ -151,6 +164,10 @@ export default function Navbar() {
     setSearchQuery("");
     setShowSuggestions(false);
     setIsSearchOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -298,35 +315,67 @@ export default function Navbar() {
             <span className="sr-only">Notifications</span>
           </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/vibrant-anime-student.png" alt="User" />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Log out</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Button
-            size="sm"
-            className="bg-gradient-to-r from-purple-600 to-orange-500 hover:from-purple-700 hover:to-orange-600"
-          >
-            Sign In
-          </Button>
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={user?.image || "/default-avatar.png"}
+                      alt={user?.name || "User"}
+                    />
+                    <AvatarFallback>
+                      {user?.name?.charAt(0) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span>{user?.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {user?.email}
+                    </span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => router.push("/user/dashboard")}
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Dashboard</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/user/profile")}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Profile Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => router.push("/user/watchlist")}
+                >
+                  <Heart className="mr-2 h-4 w-4" />
+                  <span>My Watchlist</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/user/history")}>
+                  <Library className="mr-2 h-4 w-4" />
+                  <span>Watch History</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-purple-600 to-orange-500 hover:from-purple-700 hover:to-orange-600"
+              onClick={() => router.push("/auth/login")}
+            >
+              Sign In
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -455,12 +504,74 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="h-px bg-border my-2" />
-            <Button
-              size="sm"
-              className="bg-gradient-to-r from-purple-600 to-orange-500 hover:from-purple-700 hover:to-orange-600"
-            >
-              Sign In
-            </Button>
+
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center gap-3 py-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={user?.image || "/vibrant-anime-student.png"}
+                      alt={user?.name || "User"}
+                    />
+                    <AvatarFallback>
+                      {user?.name?.charAt(0) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <span className="font-medium">{user?.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {user?.email}
+                    </span>
+                  </div>
+                </div>
+                <Link
+                  href="/user/dashboard"
+                  className="flex items-center gap-2 py-2 text-lg text-muted-foreground hover:text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <User className="h-5 w-5" />
+                  <span>Dashboard</span>
+                </Link>
+                <Link
+                  href="/user/profile"
+                  className="flex items-center gap-2 py-2 text-lg text-muted-foreground hover:text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Settings className="h-5 w-5" />
+                  <span>Profile Settings</span>
+                </Link>
+                <Link
+                  href="/user/watchlist"
+                  className="flex items-center gap-2 py-2 text-lg text-muted-foreground hover:text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Heart className="h-5 w-5" />
+                  <span>My Watchlist</span>
+                </Link>
+                <div className="h-px bg-border my-2" />
+                <Button
+                  variant="outline"
+                  className="gap-2 justify-start"
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Log out</span>
+                </Button>
+              </>
+            ) : (
+              <Button
+                className="bg-gradient-to-r from-purple-600 to-orange-500 hover:from-purple-700 hover:to-orange-600"
+                onClick={() => {
+                  router.push("/auth/login");
+                  setIsMenuOpen(false);
+                }}
+              >
+                Sign In
+              </Button>
+            )}
           </nav>
         </div>
       )}
