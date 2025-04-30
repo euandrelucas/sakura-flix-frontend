@@ -73,7 +73,7 @@ export default function RegisterPage() {
       lastName: "",
       email: "",
       password: "",
-      terms: false,
+      terms: true,
     },
   });
 
@@ -147,13 +147,13 @@ export default function RegisterPage() {
       setTimeout(() => {
         router.push("/auth/login");
       }, 1500);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
 
       // Show error toast
       toast({
         title: "Registration failed",
-        description: error.message || "An unknown error occurred",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
       });
     }
